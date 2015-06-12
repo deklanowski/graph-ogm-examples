@@ -31,7 +31,6 @@ public class DummyGraphApp {
 
 		GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(DB_LOCATION);
 		GraphDatabaseService graphDatabaseService = builder.newGraphDatabase();
-
 		// Start the neo4j web console - by default it can be accessed using http://localhost:7474. It is handy for development and should not be enabled by
 		// default.
 		ServerConfigurator webConfig = new ServerConfigurator((GraphDatabaseAPI) graphDatabaseService);
@@ -67,19 +66,18 @@ public class DummyGraphApp {
 		johannes.setJob(job);
 		johannes.addFriends(klaus, peter);
 
-//		Knows relationship = johannes.getRelationshipTo(peter);
-//		relationship.setSinceYear(2001);
+		Knows relationship = johannes.getRelationshipTo(peter);
+		relationship.setSinceYear(2001);
 
 		johannes.addFriend(matthias, 1998);
 
 		System.out.println("\n\n\n");
-		// --------------- Query the graph
 
+		// Query the graph
 		System.out.println("Name: " + johannes.getName());
 		System.out.println("Job: " + johannes.getJob().getName());
 		for (Person person : johannes.getFriends()) {
-			System.out.println("Friend of " + johannes.getName() + ": " + person.getName() + " since "
-					+ person.getRelationshipTo(person).getSinceYear());
+			System.out.println(johannes.getName() + " knows " + person.getName() + " since " + person.getRelationshipTo(person).getSinceYear());
 		}
 		neo4jBlueprintGraph.commit();
 

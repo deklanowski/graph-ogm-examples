@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.jglue.totorom.FramedVertex;
 
+import com.tinkerpop.blueprints.Edge;
+
 public class Person extends FramedVertex {
 
 	public void setName(String name) {
@@ -33,7 +35,10 @@ public class Person extends FramedVertex {
 	}
 
 	public Knows getRelationshipTo(Person person) {
-		return inE("KNOWS").next(Knows.class);
+//		outE("KNOWS").forEach(edge -> {
+//			edge.setProperty("java_clas", Knows.class.getName());
+//		});
+		return outE("KNOWS").next(Knows.class);
 	}
 
 	public void addFriend(Person person, int year) {
