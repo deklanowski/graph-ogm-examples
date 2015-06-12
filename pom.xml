@@ -2,20 +2,23 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.jotschi</groupId>
-	<artifactId>totorom-exmaples</artifactId>
+	<artifactId>graph-ogm-examples</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
 	<properties>
 		<neo4j.version>2.2.2</neo4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<modules>
+		<module>totorom</module>
+		<module>ferma</module>
+		<module>spring-data-neo4j</module>
+		<module>frames</module>
+	</modules>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.jglue.totorom</groupId>
-			<artifactId>totorom-tinkerpop2</artifactId>
-			<version>0.5.4</version>
-		</dependency>
 
 		<!-- neo4j -->
 		<dependency>
@@ -44,7 +47,6 @@
 			<artifactId>jta</artifactId>
 			<version>1.1</version>
 		</dependency>
-
 
 		<!-- Tinkerpop implementation -->
 		<dependency>
@@ -77,6 +79,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.neo4j</groupId>
