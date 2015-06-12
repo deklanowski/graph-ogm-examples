@@ -1,10 +1,11 @@
 package de.jotschi.examples;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.jglue.totorom.FramedVertex;
-
-import com.tinkerpop.blueprints.Edge;
+import org.jglue.totorom.TEdge;
 
 public class Person extends FramedVertex {
 
@@ -22,27 +23,39 @@ public class Person extends FramedVertex {
 
 	public void addFriends(Person... persons) {
 		for (Person person : persons) {
-			linkOut(person, "KNOWS");
+			person.addEdge("KNOWS", this, Knows.class);
 		}
 	}
 
 	public List<Person> getFriends() {
-		return out("KNOWS").toList(Person.class);
+		try {
+			return in("KNOWS").toList(Person.class);
+		} catch (NoSuchElementException e) {
+			return Collections.emptyList();
+		}
 	}
 
 	public Job getJob() {
-		return out("HAS_JOB").next(Job.class);
+		try {
+			return out("HAS_JOB").next(Job.class);
+		} catch (NoSuchElementException e) {
+			return null;
+		}
 	}
 
 	public Knows getRelationshipTo(Person person) {
-//		outE("KNOWS").forEach(edge -> {
-//			edge.setProperty("java_clas", Knows.class.getName());
-//		});
-		return outE("KNOWS").next(Knows.class);
+		try {
+			return inE("KNOWS").filter((TEdge edge) -> {
+				return person.getId() == edge.outV().next().getId();
+			}).next(Knows.class);
+		} catch (NoSuchElementException e) {
+			System.out.println("No Element Found");
+			return null;
+		}
 	}
 
 	public void addFriend(Person person, int year) {
-		Knows knows = addEdge("KNOWS", person, Knows.class);
+		Knows knows = person.addEdge("KNOWS", this, Knows.class);
 		knows.setSinceYear(year);
 	}
 

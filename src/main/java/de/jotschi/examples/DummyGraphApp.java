@@ -69,15 +69,16 @@ public class DummyGraphApp {
 		Knows relationship = johannes.getRelationshipTo(peter);
 		relationship.setSinceYear(2001);
 
-		johannes.addFriend(matthias, 1998);
+		relationship = johannes.getRelationshipTo(klaus);
+		relationship.setSinceYear(2002);
 
+		johannes.addFriend(matthias, 1998);
 		System.out.println("\n\n\n");
 
-		// Query the graph
 		System.out.println("Name: " + johannes.getName());
 		System.out.println("Job: " + johannes.getJob().getName());
 		for (Person person : johannes.getFriends()) {
-			System.out.println(johannes.getName() + " knows " + person.getName() + " since " + person.getRelationshipTo(person).getSinceYear());
+			System.out.println(johannes.getName() + " knows " + person.getName() + " since " + johannes.getRelationshipTo(person).getSinceYear());
 		}
 		neo4jBlueprintGraph.commit();
 
