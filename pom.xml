@@ -12,15 +12,16 @@
 	</properties>
 
 	<modules>
+		<module>frames</module>
 		<module>totorom</module>
 		<module>ferma</module>
-		<module>spring-data-neo4j</module>
-		<module>frames</module>
+		<module>spring-data-neo4j-3.x</module>
+		<module>spring-data-neo4j-4.x</module>
 	</modules>
 
 	<dependencies>
 
-		<!-- neo4j -->
+		<!-- Neo4j -->
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j-kernel</artifactId>
@@ -46,6 +47,22 @@
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
 			<version>1.1</version>
+		</dependency>
+
+		<!-- Neo4j test dependencies -->
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-io</artifactId>
+			<version>${neo4j.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-kernel</artifactId>
+			<version>${neo4j.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- Tinkerpop implementation -->
@@ -81,13 +98,7 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-kernel</artifactId>
-			<version>${neo4j.version}</version>
-			<classifier>tests</classifier>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
 
 	<build>

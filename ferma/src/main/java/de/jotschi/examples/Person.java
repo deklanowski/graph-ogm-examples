@@ -1,11 +1,13 @@
 package de.jotschi.examples;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.syncleus.ferma.AbstractVertexFrame;
 import com.syncleus.ferma.EdgeFrame;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Vertex;
 
 public class Person extends AbstractVertexFrame {
 
@@ -27,12 +29,26 @@ public class Person extends AbstractVertexFrame {
 		}
 	}
 
-	public List<? extends Person> getFriends() {
-		try {
-			return in("KNOWS").toList(Person.class);
-		} catch (NoSuchElementException e) {
-			return Collections.emptyList();
-		}
+	public Iterable<? extends Person> getFriends() {
+
+		return getVertices("KNOWS", Direction.IN, Person.class);
+
+		// try {
+		// return in("KNOWS").toSet(Person.class);
+		// } catch (NoSuchElementException e) {
+		// return Collections.emptyIterator();
+		// }
+	}
+
+	private <T> Iterable<T> getVertices(String label, Direction direction, Class<T> classOfT) {
+		Iterable<T> facadeIterator = Iterables.transform(getElement().getVertices(direction, label), new Function<Vertex, T>() {
+			@Override
+			public T apply(Vertex input) {
+				//return getGraph().frameElement(input, classOfT);
+				return (T)new Person();
+			}
+		});
+		return facadeIterator;
 	}
 
 	public Job getJob() {
@@ -45,9 +61,6 @@ public class Person extends AbstractVertexFrame {
 
 	public Knows getRelationshipTo(Person person) {
 		try {
-			// Object obj = inE("KNOWS").as("x").outV().retain(person).back("x");
-			// System.out.println(obj.getClass().getName());
-
 			return inE("KNOWS").filter((EdgeFrame edge) -> {
 				return person.getId() == edge.outV().next().getId();
 			}).next(Knows.class);

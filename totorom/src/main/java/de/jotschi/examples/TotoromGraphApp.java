@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.jglue.totorom.FrameFactory;
+import org.jglue.totorom.FramedGraph;
+import org.jglue.totorom.TypeResolver;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
@@ -11,19 +14,17 @@ import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.server.WrappingNeoServerBootstrapper;
 import org.neo4j.server.configuration.ServerConfigurator;
 
-import com.syncleus.ferma.DelegatingFramedGraph;
-import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 
-public class DummyGraphApp {
+public class TotoromGraphApp {
 
 	protected final static String DB_LOCATION = "target/graphdb";
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		FileUtils.deleteDirectory(new File(DB_LOCATION));
-		new DummyGraphApp().start();
+		new TotoromGraphApp().start();
 	}
 
 	public void start() throws InterruptedException, IOException {
@@ -45,25 +46,42 @@ public class DummyGraphApp {
 		neo4jBlueprintGraph.createKeyIndex("java_class", Edge.class);
 
 		// Setup totorom
-		FramedGraph fg = new DelegatingFramedGraph(neo4jBlueprintGraph, true, false);
+		FramedGraph fg = new FramedGraph(neo4jBlueprintGraph, FrameFactory.Default, TypeResolver.Java);
+
+		long t = System.currentTimeMillis();
 
 		// Setup the graph using totorom
-		Job job = fg.addFramedVertex(Job.class);
+		Job job = fg.addVertex(Job.class);
 		job.setName("Developer");
 
-		Person peter = fg.addFramedVertex(Person.class);
+		Person peter = fg.addVertex(Person.class);
 		peter.setName("Peter");
 
-		Person klaus = fg.addFramedVertex(Person.class);
+		Person klaus = fg.addVertex(Person.class);
 		klaus.setName("Klaus");
 
-		Person matthias = fg.addFramedVertex(Person.class);
+		Person matthias = fg.addVertex(Person.class);
 		matthias.setName("Matthias");
 
-		Person johannes = fg.addFramedVertex(Person.class);
+		Person johannes = fg.addVertex(Person.class);
 		johannes.setName("Johannes");
 		johannes.setJob(job);
 		johannes.addFriends(klaus, peter);
+
+		for (int i = 0; i < 1000000; i++) {
+			Person p = fg.addVertex(Person.class);
+			p.setName("Person_" + i);
+			johannes.addFriend(p, i);
+			if (i % 10000 == 0) {
+				neo4jBlueprintGraph.commit();
+			}
+		}
+
+		neo4jBlueprintGraph.commit();
+
+		long dur = System.currentTimeMillis() - t;
+		t = System.currentTimeMillis();
+		System.out.println("Create duration:" + dur);
 
 		Knows relationship = johannes.getRelationshipTo(peter);
 		relationship.setSinceYear(2001);
@@ -77,8 +95,14 @@ public class DummyGraphApp {
 		System.out.println("Name: " + johannes.getName());
 		System.out.println("Job: " + johannes.getJob().getName());
 		for (Person person : johannes.getFriends()) {
-			System.out.println(johannes.getName() + " knows " + person.getName() + " since " + johannes.getRelationshipTo(person).getSinceYear());
+			// System.out.println(johannes.getName() + " knows " + person.getName() + " since " + johannes.getRelationshipTo(person).getSinceYear());
+			// System.out.println(johannes.getName() + " knows " + person.getName());
 		}
+
+		dur = System.currentTimeMillis() - t;
+		t = System.currentTimeMillis();
+
+		System.out.println("Read duration:" + dur);
 		neo4jBlueprintGraph.commit();
 
 		// Don't terminate
