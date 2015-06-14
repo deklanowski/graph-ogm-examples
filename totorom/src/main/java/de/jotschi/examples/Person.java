@@ -1,6 +1,5 @@
 package de.jotschi.examples;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,7 +30,7 @@ public class Person extends FramedVertex {
 		try {
 			return in("KNOWS").toList(Person.class);
 		} catch (NoSuchElementException e) {
-			return Collections.emptyList();
+			return null;
 		}
 	}
 

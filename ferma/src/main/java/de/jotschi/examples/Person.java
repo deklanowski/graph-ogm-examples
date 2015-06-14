@@ -4,12 +4,23 @@ import java.util.NoSuchElementException;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
+import com.syncleus.ferma.AbstractElementFrame;
 import com.syncleus.ferma.AbstractVertexFrame;
 import com.syncleus.ferma.EdgeFrame;
+import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
 
 public class Person extends AbstractVertexFrame {
+
+	public Person() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Person(final FramedGraph graph, final Element element) {
+		init(graph, element);
+	}
 
 	public void setName(String name) {
 		setProperty("name", name);
@@ -36,7 +47,7 @@ public class Person extends AbstractVertexFrame {
 		// try {
 		// return in("KNOWS").toSet(Person.class);
 		// } catch (NoSuchElementException e) {
-		// return Collections.emptyIterator();
+		// return null;
 		// }
 	}
 
@@ -44,8 +55,20 @@ public class Person extends AbstractVertexFrame {
 		Iterable<T> facadeIterator = Iterables.transform(getElement().getVertices(direction, label), new Function<Vertex, T>() {
 			@Override
 			public T apply(Vertex input) {
+				//return (T) new Person(getGraph(), input);
+				T frame;
+				try {
+					frame = classOfT.newInstance();
+					((AbstractElementFrame) frame).init(getGraph(), input);	
+					return frame;
+
+				} catch (InstantiationException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				//return getGraph().frameElement(input, classOfT);
-				return (T)new Person();
+				// 
+				return null;
 			}
 		});
 		return facadeIterator;

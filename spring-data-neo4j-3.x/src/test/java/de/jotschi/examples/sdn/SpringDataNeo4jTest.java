@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SpringDataNeo4jTest {
 
 	@Autowired
-	UserRepository repository;
+	UserRepository userRepository;
 
 	@Autowired
 	GraphDatabaseService graphDatabaseService;
@@ -23,7 +23,7 @@ public class SpringDataNeo4jTest {
 	public void testSDN() {
 		User johannes = new User();
 		johannes.setName("Johannes");
-		repository.save(johannes);
+		userRepository.save(johannes);
 
 		Job job = new Job();
 		job.setName("Developer");
@@ -32,16 +32,20 @@ public class SpringDataNeo4jTest {
 
 		System.out.println("Adding friends");
 		long t = System.currentTimeMillis();
-		for (int i = 0; i < 10000; i++) {
-			User user = new User();
-			user.setName("User_" + i);
-			johannes.addFriend(user);
+		for (int e = 0; e < 20; e++) {
+			System.out.println("step " + e + " : " + (e*1000));
+			for (int i = 0; i < 1000; i++) {
+				User user = new User();
+				user.setName("User_" + (i*e));
+				johannes.addFriend(user);
+			}
+			userRepository.save(johannes);
 		}
-		repository.save(johannes);
 		System.out.println("Creation duration: " + (System.currentTimeMillis() - t));
 
 		System.out.println(johannes.getName() + " job: " + johannes.getJob().getName());
 
+		johannes= userRepository.findByName("Johannes");
 		t = System.currentTimeMillis();
 		for (User user : johannes.getFriends()) {
 			System.out.println(user.getName());

@@ -28,7 +28,7 @@ public class TotoromGraphApp {
 	}
 
 	public void start() throws InterruptedException, IOException {
-
+		System.out.println("Totorom");
 		GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(DB_LOCATION);
 		GraphDatabaseService graphDatabaseService = builder.newGraphDatabase();
 		// Start the neo4j web console - by default it can be accessed using http://localhost:7474. It is handy for development and should not be enabled by
@@ -68,7 +68,7 @@ public class TotoromGraphApp {
 		johannes.setJob(job);
 		johannes.addFriends(klaus, peter);
 
-		for (int i = 0; i < 1000000; i++) {
+		for (int i = 0; i < 5000000; i++) {
 			Person p = fg.addVertex(Person.class);
 			p.setName("Person_" + i);
 			johannes.addFriend(p, i);
@@ -82,18 +82,19 @@ public class TotoromGraphApp {
 		long dur = System.currentTimeMillis() - t;
 		t = System.currentTimeMillis();
 		System.out.println("Create duration:" + dur);
+		//
+		// Knows relationship = johannes.getRelationshipTo(peter);
+		// relationship.setSinceYear(2001);
+		//
+		// relationship = johannes.getRelationshipTo(klaus);
+		// relationship.setSinceYear(2002);
+		//
+		// johannes.addFriend(matthias, 1998);
+		// System.out.println("\n\n\n");
 
-		Knows relationship = johannes.getRelationshipTo(peter);
-		relationship.setSinceYear(2001);
+		// System.out.println("Name: " + johannes.getName());
+		// System.out.println("Job: " + johannes.getJob().getName());
 
-		relationship = johannes.getRelationshipTo(klaus);
-		relationship.setSinceYear(2002);
-
-		johannes.addFriend(matthias, 1998);
-		System.out.println("\n\n\n");
-
-		System.out.println("Name: " + johannes.getName());
-		System.out.println("Job: " + johannes.getJob().getName());
 		for (Person person : johannes.getFriends()) {
 			// System.out.println(johannes.getName() + " knows " + person.getName() + " since " + johannes.getRelationshipTo(person).getSinceYear());
 			// System.out.println(johannes.getName() + " knows " + person.getName());

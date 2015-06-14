@@ -14,6 +14,7 @@ public class User extends AbstractPersistable {
 	@Fetch
 	private String name;
 
+	@Fetch
 	@RelatedTo(type = "KNOWS", direction = Direction.OUTGOING, elementClass = User.class)
 	private Set<User> friends = new HashSet<>();
 

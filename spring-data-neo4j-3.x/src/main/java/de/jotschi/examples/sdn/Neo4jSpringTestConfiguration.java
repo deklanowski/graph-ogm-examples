@@ -1,7 +1,7 @@
 package de.jotschi.examples.sdn;
 
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.test.TestGraphDatabaseFactory;
+import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +15,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = { "de.jotschi.examples.sdn" })
 public class Neo4jSpringTestConfiguration extends Neo4jConfiguration {
 
+	public static final String DBPATH = "target/graphdb";
+
 	public Neo4jSpringTestConfiguration() {
 		setBasePackage("de.jotschi.examples.sdn");
 	}
 
 	@Bean
 	public GraphDatabaseService graphDatabaseService() {
-		return new TestGraphDatabaseFactory().newImpermanentDatabase();
+		return new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(DBPATH).newGraphDatabase();
 	}
 
 }
