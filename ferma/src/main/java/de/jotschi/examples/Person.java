@@ -1,12 +1,12 @@
 package de.jotschi.examples;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.syncleus.ferma.AbstractElementFrame;
 import com.syncleus.ferma.AbstractVertexFrame;
-import com.syncleus.ferma.EdgeFrame;
 import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Element;
@@ -25,6 +25,10 @@ public class Person extends AbstractVertexFrame {
 	public void setName(String name) {
 		setProperty("name", name);
 	}
+	
+	public String getFermaType() {
+		return getProperty("ferma_type");
+	}
 
 	public String getName() {
 		return getProperty("name");
@@ -40,35 +44,42 @@ public class Person extends AbstractVertexFrame {
 		}
 	}
 
-	public Iterable<? extends Person> getFriends() {
+	public List<? extends Person> getFriends() {
 
-		return getVertices("KNOWS", Direction.IN, Person.class);
-
-		// try {
-		// return in("KNOWS").toSet(Person.class);
-		// } catch (NoSuchElementException e) {
-		// return null;
-		// }
+		//		return getVertices("KNOWS", Direction.IN, Person.class);
+		try {
+			//return in("KNOWS").toListExplicit(Person.class);
+			return v().has(Person.class).toListExplicit(Person.class);
+			//return in("KNOWS").has("ferma_type", Person.class.getName()).toList(Person.class);
+		} catch (NoSuchElementException e) {
+			return null;
+		}
 	}
 
 	private <T> Iterable<T> getVertices(String label, Direction direction, Class<T> classOfT) {
 		Iterable<T> facadeIterator = Iterables.transform(getElement().getVertices(direction, label), new Function<Vertex, T>() {
 			@Override
 			public T apply(Vertex input) {
-				//return (T) new Person(getGraph(), input);
-				T frame;
-				try {
-					frame = classOfT.newInstance();
-					((AbstractElementFrame) frame).init(getGraph(), input);	
-					return frame;
+				//				return (T) new Person(getGraph(), input);
+				boolean frameElement = true;
+				if (!frameElement) {
 
-				} catch (InstantiationException | IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					T frame;
+					try {
+						frame = classOfT.newInstance();
+						((AbstractElementFrame) frame).init(getGraph(), input);
+						return frame;
+
+					} catch (InstantiationException | IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//				
+					// 
+					return null;
+				} else {
+					return getGraph().frameElement(input, classOfT);
 				}
-				//return getGraph().frameElement(input, classOfT);
-				// 
-				return null;
 			}
 		});
 		return facadeIterator;
@@ -83,10 +94,12 @@ public class Person extends AbstractVertexFrame {
 	}
 
 	public Knows getRelationshipTo(Person person) {
+
 		try {
-			return inE("KNOWS").filter((EdgeFrame edge) -> {
-				return person.getId() == edge.outV().next().getId();
-			}).next(Knows.class);
+			//					return inE("KNOWS").filter((EdgeFrame edge) -> {
+			//						return person.getId() == edge.outV().next().getId();
+			//					}).next(Knows.class);
+			return inE("KNOWS").mark().outV().retain(person).back().next(Knows.class);
 		} catch (NoSuchElementException e) {
 			System.out.println("No Element Found");
 			return null;
@@ -98,4 +111,8 @@ public class Person extends AbstractVertexFrame {
 		knows.setSinceYear(year);
 	}
 
+	@Override
+	public String toString() {
+		return "Person: " + getName() + " json: " + toJson();
+	}
 }
