@@ -2,45 +2,20 @@ package de.jotschi.examples;
 
 import static javax.swing.SortOrder.DESCENDING;
 import static javax.swing.SortOrder.UNSORTED;
-import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.SortOrder;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Before;
 import org.junit.Test;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.kernel.GraphDatabaseAPI;
-import org.neo4j.server.WrappingNeoServerBootstrapper;
-import org.neo4j.server.configuration.ServerConfigurator;
 import org.neo4j.server.rest.repr.InvalidArgumentsException;
 
-import com.syncleus.ferma.DelegatingFramedTransactionalGraph;
 import com.syncleus.ferma.VertexFrame;
-import com.syncleus.ferma.WrapperFramedTransactionalGraph;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 
-public class FermaGraphApp {
-
-	protected final static String DB_LOCATION = "target/graphdb";
-
-	@Before
-	public void setup() throws IOException {
-		FileUtils.deleteDirectory(new File(DB_LOCATION));
-	}
+public class FermaGraphTest extends AbstractFermaGraphTest {
 
 	@Test
 	public void testGraph() throws InvalidArgumentsException {
-
-		WrapperFramedTransactionalGraph<Neo4j2Graph> fg = setupGraph();
 
 		Job jobDev = fg.addFramedVertex(Job.class);
 		jobDev.setName("Developer");
@@ -54,26 +29,26 @@ public class FermaGraphApp {
 		Job jobHR = fg.addFramedVertex(Job.class);
 		jobHR.setName("Human Resource Management");
 
-		Person peter = fg.addFramedVertex(Person.class);
+		User peter = fg.addFramedVertex(User.class);
 		peter.setName("Peter");
 		peter.setJob(jobCTO);
 
-		Person klaus = fg.addFramedVertex(Person.class);
+		User klaus = fg.addFramedVertex(User.class);
 		klaus.setName("Klaus");
 		//		klaus.setJob(jobHR);
 
-		Person matthias = fg.addFramedVertex(Person.class);
+		User matthias = fg.addFramedVertex(User.class);
 		matthias.setName("Matthias");
 		matthias.setJob(jobDev);
 
-		Person johannes = fg.addFramedVertex(Person.class);
+		User johannes = fg.addFramedVertex(User.class);
 		johannes.setName("Johannes");
 		johannes.setJob(jobDev);
 		johannes.addFriends(klaus, peter);
 
 		long t = System.currentTimeMillis();
 		for (int i = 0; i < 10; i++) {
-			Person person = fg.addFramedVertex(Person.class);
+			User person = fg.addFramedVertex(User.class);
 			person.setName("User_" + i);
 			johannes.addFriend(person, i);
 			if (i % 10000 == 0) {
@@ -82,15 +57,15 @@ public class FermaGraphApp {
 		}
 		System.out.println("Duration: " + (System.currentTimeMillis() - t));
 
-//		for (int i = 0; i < 25; i++) {
-//			Person person = fg.addFramedVertex(Person.class);
-//			person.setName("User HR " + i);
-//			person.setJob(jobHR);
-//
-//			Person person2 = fg.addFramedVertex(Person.class);
-//			person2.setName("User QA " + i);
-//			person2.setJob(jobQA);
-//		}
+		//		for (int i = 0; i < 25; i++) {
+		//			Person person = fg.addFramedVertex(Person.class);
+		//			person.setName("User HR " + i);
+		//			person.setJob(jobHR);
+		//
+		//			Person person2 = fg.addFramedVertex(Person.class);
+		//			person2.setName("User QA " + i);
+		//			person2.setJob(jobQA);
+		//		}
 		fg.commit();
 
 		Knows relationship = johannes.getRelationshipTo(peter);
@@ -106,7 +81,7 @@ public class FermaGraphApp {
 		//		System.out.println("Job: " + johannes.getJob().getName());
 		//		System.out.println(johannes.getName() + " has " + johannes.getFriends().size() + " friends.");
 		t = System.currentTimeMillis();
-		for (Person person : johannes.getFriends()) {
+		for (User person : johannes.getFriends()) {
 			//System.out.println(johannes.getName() + " knows " + person.getName() + " since " + johannes.getRelationshipTo(person).getSinceYear());
 			System.out.println(johannes.getName() + " knows " + person.getName() + " type " + person.getFermaType());
 		}
@@ -138,7 +113,7 @@ public class FermaGraphApp {
 		//		System.in.read();
 	}
 
-	public Page<? extends Person> getPersonsPerJob(Job job, String sortBy, SortOrder order, int page, int pageSize) throws InvalidArgumentsException {
+	public Page<? extends User> getPersonsPerJob(Job job, String sortBy, SortOrder order, int page, int pageSize) throws InvalidArgumentsException {
 
 		if (page < 1) {
 			throw new InvalidArgumentsException("The page must always be positive");
@@ -157,7 +132,7 @@ public class FermaGraphApp {
 
 		long count = job.in("HAS_JOB").count();
 		//		System.out.println("Found: " + count);
-		List<? extends Person> list = job.in("HAS_JOB").order((VertexFrame f1, VertexFrame f2) -> {
+		List<? extends User> list = job.in("HAS_JOB").order((VertexFrame f1, VertexFrame f2) -> {
 			if (order == DESCENDING) {
 				VertexFrame tmp = f1;
 				f1 = f2;
@@ -168,35 +143,13 @@ public class FermaGraphApp {
 
 			return f2.getProperty(sortBy).equals(f1.getProperty(sortBy)) ? 1 : 0;
 
-		}).range(low, upper).toList(Person.class);
+		}).range(low, upper).toList(User.class);
 
 		long totalPages = count / pageSize;
 
 		// Internally the page size was reduced. We need to increment it now that we are finished.
-		return new Page<Person>(list, count, ++page, totalPages, list.size());
+		return new Page<User>(list, count, ++page, totalPages, list.size());
 
 	}
 
-	public WrapperFramedTransactionalGraph<Neo4j2Graph> setupGraph() {
-		System.out.println("Ferma");
-		GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(DB_LOCATION);
-		GraphDatabaseService graphDatabaseService = builder.newGraphDatabase();
-		// Start the neo4j web console - by default it can be accessed using http://localhost:7474. It is handy for development and should not be enabled by
-		// default.
-		ServerConfigurator webConfig = new ServerConfigurator((GraphDatabaseAPI) graphDatabaseService);
-		WrappingNeoServerBootstrapper bootStrapper = new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graphDatabaseService, webConfig);
-		bootStrapper.start();
-
-		// Setup neo4j blueprint implementation
-		Neo4j2Graph neo4jBlueprintGraph = new Neo4j2Graph(graphDatabaseService);
-
-		// Add some indices
-		neo4jBlueprintGraph.createKeyIndex("name", Vertex.class);
-		neo4jBlueprintGraph.createKeyIndex("ferma_type", Vertex.class);
-		neo4jBlueprintGraph.createKeyIndex("ferma_type", Edge.class);
-
-		// Setup ferma
-		WrapperFramedTransactionalGraph<Neo4j2Graph> fg = new DelegatingFramedTransactionalGraph<>(neo4jBlueprintGraph, true, false);
-		return fg;
-	}
 }

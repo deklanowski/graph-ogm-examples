@@ -1,14 +1,7 @@
 package de.jotschi.examples;
 
-import com.syncleus.ferma.AbstractVertexFrame;
+public class Job extends BaseVertex {
 
-public class Job extends AbstractVertexFrame {
+	public static final String HAS_JOB = "HAS_JOB";
 
-	public String getName() {
-		return getProperty("name");
-	}
-
-	public void setName(String name) {
-		setProperty("name", name);
-	}
 }

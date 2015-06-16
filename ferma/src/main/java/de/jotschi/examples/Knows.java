@@ -4,12 +4,12 @@ import com.syncleus.ferma.AbstractEdgeFrame;
 
 public class Knows extends AbstractEdgeFrame {
 
-	public Person getKnowingPerson() {
-		return inV().next(Person.class);
+	public User getKnowingPerson() {
+		return inV().next(User.class);
 	}
 
-	public Person getKnownPerson() {
-		return outV().next(Person.class);
+	public User getKnownPerson() {
+		return outV().next(User.class);
 	}
 
 	public int getSinceYear() {
