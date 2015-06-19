@@ -1,8 +1,6 @@
-package de.jotschi.examples;
+package de.jotschi.example;
 
 import java.util.List;
-
-import de.jotschi.examples.perm.Permissions;
 
 public class Role extends BaseVertex {
 

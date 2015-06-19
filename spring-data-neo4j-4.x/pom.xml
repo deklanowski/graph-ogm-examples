@@ -12,8 +12,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<neo4j.cypher.version>2.1.4</neo4j.cypher.version>
 		<spring.version>4.0.7.RELEASE</spring.version>
+		<neo4j.cypher.version>2.1.4</neo4j.cypher.version>
 		<spring.data.version>4.0.0.M1</spring.data.version>
 	</properties>
 
@@ -21,9 +21,46 @@
 
 		<!-- Neo4j -->
 		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-kernel</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.neo4j.app</groupId>
 			<artifactId>neo4j-server</artifactId>
 			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j.app</groupId>
+			<artifactId>neo4j-server</artifactId>
+			<classifier>static-web</classifier>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-cypher</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<!-- Neo4j test dependencies -->
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-io</artifactId>
+			<version>${neo4j.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-kernel</artifactId>
+			<version>${neo4j.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- Spring Data Neo4j -->
@@ -120,7 +157,7 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>neo4j</id>
+			<id>neo4j-m2</id>
 			<url>http://m2.neo4j.org/releases/</url>
 			<releases>
 				<enabled>true</enabled>

@@ -9,10 +9,18 @@
 	</parent>
 
 	<artifactId>graph-ogm-examples-ferma</artifactId>
+	<packaging>pom</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<modules>
+		<module>domain-model</module>
+		<module>neo4j</module>
+		<module>titandb</module>
+		<module>orientdb</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
@@ -20,6 +28,8 @@
 			<artifactId>ferma</artifactId>
 			<version>2.0.7-SNAPSHOT</version>
 		</dependency>
+		
+		
 	</dependencies>
 
 </project>

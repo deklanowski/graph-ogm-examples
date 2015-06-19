@@ -1,4 +1,4 @@
-package de.jotschi.examples;
+package de.jotschi.example;
 
 import com.syncleus.ferma.AbstractEdgeFrame;
 
@@ -14,7 +14,7 @@ public class Knows extends AbstractEdgeFrame {
 
 	public int getSinceYear() {
 		Integer since = getProperty("since");
-		if(since ==null) {
+		if (since == null) {
 			return 0;
 		} else {
 			return since;

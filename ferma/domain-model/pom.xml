@@ -3,28 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>graph-ogm-examples</artifactId>
+		<artifactId>graph-ogm-examples-ferma</artifactId>
 		<groupId>de.jotschi</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>graph-ogm-examples-frames</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>graph-ogm-examples-ferma-domain-model</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<modules>
-		<module>neo4j</module>
-	</modules>
-
-	<dependencies>
-		<dependency>
-			<groupId>com.tinkerpop</groupId>
-			<artifactId>frames</artifactId>
-			<version>2.6.0</version>
-		</dependency>
-	</dependencies>
 
 </project>

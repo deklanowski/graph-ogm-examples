@@ -1,4 +1,4 @@
-package de.jotschi.examples.perm;
+package de.jotschi.example;
 
 public enum Permissions {
 	CREATE("HAS_CREATE_PERMISSION"), READ("HAS_READ_PERMISSION"), UPDATE("HAS_UPDATE_PERMISSION"), DELETE("HAS_DELETE_PERMISSION");

@@ -1,4 +1,4 @@
-package de.jotschi.examples;
+package de.jotschi.example;
 
 import java.util.List;
 
