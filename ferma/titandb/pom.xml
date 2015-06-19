@@ -1,18 +1,59 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <artifactId>graph-ogm-examples-ferma</artifactId>
-        <groupId>de.jotschi</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<artifactId>graph-ogm-examples-ferma</artifactId>
+		<groupId>de.jotschi</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>graph-ogm-examples-ferma-titandb</artifactId>
+	<artifactId>graph-ogm-examples-ferma-titandb</artifactId>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<titandb.version>0.5.4</titandb.version>
+	</properties>
 
+	<dependencies>
+
+		<dependency>
+			<groupId>de.jotschi</groupId>
+			<artifactId>graph-ogm-examples-ferma-domain-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Titan DB -->
+		<dependency>
+			<groupId>com.thinkaurelius.titan</groupId>
+			<artifactId>titan-es</artifactId>
+			<version>${titandb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thinkaurelius.titan</groupId>
+			<artifactId>titan-core</artifactId>
+			<version>${titandb.version}</version>
+		</dependency>
+
+		<!-- Blueprints -->
+		<dependency>
+			<groupId>com.tinkerpop.blueprints</groupId>
+			<artifactId>blueprints-core</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+
+		<!-- graph db backends -->
+		<dependency>
+			<groupId>com.thinkaurelius.titan</groupId>
+			<artifactId>titan-berkeleyje</artifactId>
+			<version>${titandb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thinkaurelius.titan</groupId>
+			<artifactId>titan-cassandra</artifactId>
+			<version>${titandb.version}</version>
+		</dependency>
+
+	</dependencies>
 
 </project>

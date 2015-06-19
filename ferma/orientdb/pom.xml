@@ -12,7 +12,29 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<orientdb.version>2.1-rc4</orientdb.version>
 	</properties>
 
+	<dependencies>
+
+		<dependency>
+			<groupId>de.jotschi</groupId>
+			<artifactId>graph-ogm-examples-ferma-domain-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- OrientDB -->
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-core</artifactId>
+			<version>${orientdb.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.orientechnologies</groupId>
+			<artifactId>orientdb-graphdb</artifactId>
+			<version>${orientdb.version}</version>
+		</dependency>
+
+	</dependencies>
 
 </project>
