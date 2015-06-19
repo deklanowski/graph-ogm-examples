@@ -21,31 +21,28 @@ public class SpringDataNeo4jTest {
 
 	@Test
 	public void testSDN() {
-		User johannes = new User();
-		johannes.setName("Johannes");
-		userRepository.save(johannes);
-
 		Job job = new Job();
 		job.setName("Developer");
 
+		User johannes = new User();
+		johannes.setName("Johannes");
 		johannes.setJob(job);
+		userRepository.save(johannes);
 
 		System.out.println("Adding friends");
 		long t = System.currentTimeMillis();
-		for (int e = 0; e < 20; e++) {
-			System.out.println("step " + e + " : " + (e*1000));
-			for (int i = 0; i < 1000; i++) {
-				User user = new User();
-				user.setName("User_" + (i*e));
-				johannes.addFriend(user);
-			}
-			userRepository.save(johannes);
+
+		for (int i = 0; i < 1000; i++) {
+			User user = new User();
+			user.setName("User_" + i);
+			johannes.addFriend(user);
 		}
+		userRepository.save(johannes);
 		System.out.println("Creation duration: " + (System.currentTimeMillis() - t));
 
 		System.out.println(johannes.getName() + " job: " + johannes.getJob().getName());
 
-		johannes= userRepository.findByName("Johannes");
+		johannes = userRepository.findByName("Johannes");
 		t = System.currentTimeMillis();
 		for (User user : johannes.getFriends()) {
 			System.out.println(user.getName());

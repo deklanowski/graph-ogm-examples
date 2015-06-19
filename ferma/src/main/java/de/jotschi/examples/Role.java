@@ -20,7 +20,7 @@ public class Role extends BaseVertex {
 	}
 
 	public boolean hasReadPermission(Product product) {
-		return out(Permissions.READ.getLabel()).has(Product.class).hasId(product.getId()).count() > 0;
+		return out(Permissions.READ.getLabel()).has(Product.class).retain(product).count() > 0;
 	}
 
 }

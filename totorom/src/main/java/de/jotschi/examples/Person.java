@@ -3,8 +3,8 @@ package de.jotschi.examples;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.jglue.totorom.EdgeTraversal;
 import org.jglue.totorom.FramedVertex;
-import org.jglue.totorom.TEdge;
 
 public class Person extends FramedVertex {
 
@@ -43,12 +43,10 @@ public class Person extends FramedVertex {
 	}
 
 	public Knows getRelationshipTo(Person person) {
-		try {
-			return inE("KNOWS").filter((TEdge edge) -> {
-				return person.getId() == edge.outV().next().getId();
-			}).next(Knows.class);
-		} catch (NoSuchElementException e) {
-			System.out.println("No Element Found");
+		EdgeTraversal<?, ?, ?> mark = inE("KNOWS").mark().outV().retain(person).back();
+		if (mark.hasNext()) {
+			return mark.next(Knows.class);
+		} else {
 			return null;
 		}
 	}

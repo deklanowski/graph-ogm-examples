@@ -11,6 +11,8 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 @NodeEntity
 public class User extends AbstractPersistable {
 
+	private static final long serialVersionUID = -8177562295473833196L;
+
 	@Fetch
 	private String name;
 

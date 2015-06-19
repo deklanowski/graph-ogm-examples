@@ -7,6 +7,8 @@ import org.springframework.data.neo4j.annotation.StartNode;
 @RelationshipEntity
 public class Knows extends AbstractPersistable {
 
+	private static final long serialVersionUID = -3733090621104615743L;
+
 	public int year;
 
 	@StartNode

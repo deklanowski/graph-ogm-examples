@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.jglue.totorom.FrameFactory;
+import org.jglue.totorom.FramedGraph;
+import org.jglue.totorom.TypeResolver;
+import org.junit.Before;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
@@ -14,23 +18,20 @@ import org.neo4j.server.configuration.ServerConfigurator;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
-import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
-import com.tinkerpop.blueprints.impls.tg.TinkerGraphFactory;
-import com.tinkerpop.frames.FramedGraph;
-import com.tinkerpop.frames.FramedGraphFactory;
-import com.tinkerpop.frames.modules.gremlingroovy.GremlinGroovyModule;
 
-public class FramesGraphApp {
-
+public abstract class AbstractTotoromGraphTest {
 	protected final static String DB_LOCATION = "target/graphdb";
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public FramedGraph fg;
+
+	@Before
+	public void setup() throws IOException {
 		FileUtils.deleteDirectory(new File(DB_LOCATION));
-		new FramesGraphApp().start();
+		fg = setupGraph();
 	}
 
-	public void start() throws InterruptedException, IOException {
-
+	private FramedGraph setupGraph() {
+		System.out.println("Totorom");
 		GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(DB_LOCATION);
 		GraphDatabaseService graphDatabaseService = builder.newGraphDatabase();
 		// Start the neo4j web console - by default it can be accessed using http://localhost:7474. It is handy for development and should not be enabled by
@@ -47,17 +48,10 @@ public class FramesGraphApp {
 		neo4jBlueprintGraph.createKeyIndex("java_class", Vertex.class);
 		neo4jBlueprintGraph.createKeyIndex("java_class", Edge.class);
 
-		FramedGraphFactory factory = new FramedGraphFactory(new GremlinGroovyModule()); // (1) Factories should be reused for performance and memory
-																						// conservation.
+		// Setup totorom
+		FramedGraph fg = new FramedGraph(neo4jBlueprintGraph, FrameFactory.Default, TypeResolver.Java);
 
-		FramedGraph framedGraph = factory.create(neo4jBlueprintGraph); // Frame the graph.
-
-		User johannes = framedGraph.addVertex(null, User.class);
-		johannes.setName("Johannes");
-
-		Job job = framedGraph.addVertex(null, Job.class);
-		job.setName("Developer");
-		
-		johannes.setJob(job);
+		return fg;
 	}
+
 }

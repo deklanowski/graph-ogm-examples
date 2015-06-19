@@ -19,21 +19,23 @@
 
 	<dependencies>
 
+		<!-- Neo4j -->
+		<dependency>
+			<groupId>org.neo4j.app</groupId>
+			<artifactId>neo4j-server</artifactId>
+			<version>${neo4j.version}</version>
+		</dependency>
+
 		<!-- Spring Data Neo4j -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-neo4j</artifactId>
 			<version>${spring.data.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>neo4j-cypher-dsl</artifactId>
-					<groupId>org.neo4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>neo4j</artifactId>
-					<groupId>org.neo4j</groupId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-cypher-dsl</artifactId>
+			<version>${neo4j.cypher.version}</version>
 		</dependency>
 
 		<!-- Spring -->
@@ -62,11 +64,7 @@
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-cypher-dsl</artifactId>
-			<version>${neo4j.cypher.version}</version>
-		</dependency>
+
 
 		<!-- Test dependencies -->
 		<dependency>
@@ -76,19 +74,51 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-neo4j</artifactId>
+			<version>${spring.data.version}</version>
+			<type>test-jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-test</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-kernel</artifactId>
+			<version>${neo4j.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-io</artifactId>
+			<version>${neo4j.version}</version>
+			<type>test-jar</type>
+		</dependency>
+		<dependency>
 			<groupId>org.neo4j.app</groupId>
 			<artifactId>neo4j-server</artifactId>
 			<version>${neo4j.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>neo4j</artifactId>
-					<groupId>org.neo4j</groupId>
-				</exclusion>
-			</exclusions>
+			<type>test-jar</type>
 		</dependency>
 	</dependencies>
 
 	<repositories>
+		<repository>
+			<id>spring-libs-snapshot</id>
+			<name>Spring</name>
+			<url>http://repo.spring.io/libs-snapshot</url>
+		</repository>
+		<repository>
+			<id>neo4j</id>
+			<url>http://m2.neo4j.org/content/repositories/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 		<repository>
 			<id>neo4j</id>
 			<url>http://m2.neo4j.org/releases/</url>
@@ -106,6 +136,16 @@
 			<releases>
 				<enabled>true</enabled>
 			</releases>
+		</repository>
+		<repository>
+			<id>com.springsource.repository.bundles.release</id>
+			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/release</url>
+		</repository>
+		<repository>
+			<id>com.springsource.repository.bundles.external</id>
+			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/external</url>
 		</repository>
 	</repositories>
 

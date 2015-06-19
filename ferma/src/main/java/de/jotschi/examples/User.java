@@ -91,7 +91,7 @@ public class User extends BaseVertex {
 	}
 
 	public boolean hasReadPermission(Product product) {
-		return in(Group.HAS_MEMBER).out(Role.HAS_ROLE).out(Permissions.READ.getLabel()).has(Product.class).hasId(product.getId()).count() > 0;
+		return in(Group.HAS_MEMBER).out(Role.HAS_ROLE).out(Permissions.READ.getLabel()).has(Product.class).retain(product).count() > 0;
 	}
 
 	@Override

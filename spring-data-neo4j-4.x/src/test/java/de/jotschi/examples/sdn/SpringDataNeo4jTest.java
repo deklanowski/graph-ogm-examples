@@ -2,7 +2,6 @@ package de.jotschi.examples.sdn;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,9 +14,6 @@ public class SpringDataNeo4jTest {
 
 	@Autowired
 	UserRepository repository;
-
-	@Autowired
-	GraphDatabaseService graphDatabaseService;
 
 	@Test
 	public void testSDN() {
@@ -32,7 +28,7 @@ public class SpringDataNeo4jTest {
 
 		System.out.println("Adding friends");
 		long t = System.currentTimeMillis();
-		for (int i = 0; i < 1000000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			User user = new User();
 			johannes.addFriend(user);
 		}
@@ -43,7 +39,7 @@ public class SpringDataNeo4jTest {
 
 		t = System.currentTimeMillis();
 		for (User user : johannes.getFriends()) {
-
+			System.out.println(user.getName());
 		}
 		System.out.println("Read duration: " + (System.currentTimeMillis() - t));
 	}
