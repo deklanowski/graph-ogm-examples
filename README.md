@@ -2,6 +2,9 @@
 
 This project contains various OGM examples for different graph databases.
 
+Please clone git@github.com:Jotschi/Ferma.git and import the project since i added addtional methods to ferma that are not yet merged back. This note will be removed one those changed have been released and the updated ferma version can be loaded using maven.
+
+
 Blueprint based:
 
 * [Ferma](https://github.com/Syncleus/Ferma) -> **/ferma**
