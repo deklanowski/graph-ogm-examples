@@ -3,32 +3,33 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>graph-ogm-examples</artifactId>
+		<artifactId>graph-ogm-examples-ferma</artifactId>
 		<groupId>de.jotschi</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>graph-ogm-examples-ferma</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>graph-ogm-examples-ferma-bitsy</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bitsy.version>1.5.1</bitsy.version>
 	</properties>
 
-	<modules>
-		<module>domain-model</module>
-		<module>neo4j</module>
-		<module>titandb</module>
-		<module>bitsy</module>
-		<module>orientdb</module>
-	</modules>
-
 	<dependencies>
+
 		<dependency>
-			<groupId>com.syncleus.ferma</groupId>
-			<artifactId>ferma</artifactId>
-			<version>2.1.0</version>
+			<groupId>de.jotschi</groupId>
+			<artifactId>graph-ogm-examples-ferma-domain-model</artifactId>
+			<version>${project.version}</version>
 		</dependency>
+
+		<!-- Bitsy -->
+		<dependency>
+			<groupId>com.lambdazen.bitsy</groupId>
+			<artifactId>bitsy</artifactId>
+			<version>${bitsy.version}</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

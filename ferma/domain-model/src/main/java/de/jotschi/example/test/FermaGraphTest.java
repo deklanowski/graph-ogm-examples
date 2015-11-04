@@ -2,7 +2,6 @@ package de.jotschi.example.test;
 
 import static javax.swing.SortOrder.DESCENDING;
 import static javax.swing.SortOrder.UNSORTED;
-import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import com.syncleus.ferma.WrapperFramedTransactionalGraph;
 import com.tinkerpop.blueprints.TransactionalGraph;
 
 import de.jotschi.example.Group;
+import de.jotschi.example.IJob;
 import de.jotschi.example.InvalidArgumentException;
 import de.jotschi.example.Job;
 import de.jotschi.example.Knows;
@@ -41,12 +41,21 @@ public abstract class FermaGraphTest<T extends TransactionalGraph> {
 	public void setup() throws IOException {
 		FileUtils.deleteDirectory(new File(DB_LOCATION));
 		fg = setupGraph();
-
 	}
 
 	@After
 	public void tearDown() {
 		fg.close();
+	}
+
+	@Test
+	public void testCasting() {
+		Job jobCTO = fg.addFramedVertex(Job.class);
+		jobCTO.setName("Chief Technology Officer");
+
+		//IJob job = (IJob) fg.v().has(Job.class).nextOrDefaultExplicit(Job.class, null);
+		IJob job = fg.v().has(Job.class).nextOrDefaultExplicit(Job.class, null);
+		System.out.println(job.getJobName());
 	}
 
 	@Test
@@ -101,6 +110,7 @@ public abstract class FermaGraphTest<T extends TransactionalGraph> {
 		}
 		fg.commit();
 
+		johannes.getElement().getProperty("name");
 		Knows relationship = johannes.getRelationshipTo(peter);
 		relationship.setSinceYear(2001);
 
@@ -133,11 +143,11 @@ public abstract class FermaGraphTest<T extends TransactionalGraph> {
 			System.out.println(person.getName());
 		}
 
-//		int clampedSize = pageSize >= 25 ? 25 : pageSize;
-//		assertEquals(25, personPage.getTotalElements());
-//		assertEquals(page, personPage.getNumber());
-//		assertEquals(clampedSize, personPage.getSize());
-//		assertEquals(clampedSize, personPage.getNumberOfElements());
+		// int clampedSize = pageSize >= 25 ? 25 : pageSize;
+		// assertEquals(25, personPage.getTotalElements());
+		// assertEquals(page, personPage.getNumber());
+		// assertEquals(clampedSize, personPage.getSize());
+		// assertEquals(clampedSize, personPage.getNumberOfElements());
 
 		for (User user : fg.v().toList(User.class)) {
 			System.out.println(user.getName() + " " + user.getFermaType());

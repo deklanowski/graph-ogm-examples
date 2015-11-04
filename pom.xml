@@ -7,8 +7,9 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<neo4j.version>2.2.2</neo4j.version>
+		<neo4j.version>2.2.6</neo4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<surefire.forkcount>4</surefire.forkcount>
 	</properties>
 
 	<modules>
@@ -46,6 +47,38 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.11</version>
+				<configuration>
+					<forkedProcessTimeoutInSeconds>2700</forkedProcessTimeoutInSeconds>
+					<runOrder>random</runOrder>
+					<reuseForks>false</reuseForks>
+					<forkCount>${surefire.forkcount}</forkCount>
+					<trimStackTrace>false</trimStackTrace>
+					<includes>
+						<include>**/*Test.java</include>
+						<include>**/*TestSuite.java</include>
+						<include>**/*IntegrationTest.java</include>
+					</includes>
+					<excludes>
+						<include>**/*AbstractTest.java</include>
+						<include>**/*Abstract*Test.java</include>
+					</excludes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>ossrh.snapshots</id>
+			<name>oss.sonatype</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
